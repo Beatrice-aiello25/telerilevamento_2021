@@ -7,7 +7,7 @@ install.packages("raster")
 library(raster)
 
 # Indicare la cartella da cui estrarre i dati
-setwd(C:/lab/")
+library(raster)
 
 # Funzione brick per importare i dati
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
@@ -31,3 +31,87 @@ plot(p224r63_2011, col= cl)
 # Funzione plot colour change new2
 cl <- colorRampPalette(c("blue", "green", "orange", "red", "light blue", "purple"))(100)
 plot(p224r63_2011, col= cl)
+
+##### DAY 3
+# Funzione library per richiamare il pacchetto raster
+library(raster)
+
+# Indicare la cartella da cui estrarre i dati
+setwd(C:/lab/")
+
+# Bande Landsat
+# B1: blu
+# B2: verde
+# B3: rosso
+# B4: infrarosso vicino
+# B5: infrarosso medio
+# B6: infrarosso termico
+# B7: infrarosso medio
+
+# funzione dev.off ripulisce la grafica
+dev.off()
+
+# Funzione plot
+plot(p224r63_2011$B1_sre)
+
+# plot band 1 with a predefined colut ramp palette
+
+# Funzione colorRampPalette stabilisce una determinata palette di colori
+cl <- colorRampPalette(c("blue", "turquoise", "light blue", "dark blue"))(100)
+
+# Funzione plot 
+plot(p224r63_2011$B1_sre, col= cl)
+
+# Funzione plot colour change new
+cl <- colorRampPalette(c("blue", "turquoise", "light blue", "dark blue"))(100)
+plot(p224r63_2011$B1_sre, col= cl)
+
+# funzione dev.off ripulisce la grafica
+dev.off()
+
+# Funzione plot
+plot(p224r63_2011$B1_sre)
+
+# Funzione plot
+plot(p224r63_2011$B2_sre)
+
+# Funzione par permette di personalizzare la visualizzazione delle bande 
+# 1 riga, 2 colonne
+par(mfrow=c(1,2))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+
+# 2 riga, 1 colonne
+par(mfrow=c(2,1))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+
+# Plot le prime 4 bande di landsat
+par(mfrow=c(4,1))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+plot(p224r63_2011$B3_sre)
+plot(p224r63_2011$B4_sre)
+
+# distribuzione quadrata delle bande, 2 righe, 2 colonne
+par(mfrow=c(2,2))
+plot(p224r63_2011$B1_sre)
+plot(p224r63_2011$B2_sre)
+plot(p224r63_2011$B3_sre)
+plot(p224r63_2011$B4_sre)
+
+# distribuzione quadrata delle bande, 2 righe, 2 colonne
+par(mfrow=c(2,2))
+
+# Cambio la colorazione delle bande
+clb <- colorRampPalette(c("turquoise", "light blue", "dark blue"))(100)
+plot(p224r63_2011$B1_sre, col=clb)
+
+clg <- colorRampPalette(c("green", "light green", "dark green"))(100)
+plot(p224r63_2011$B2_sre, col=clg)
+
+clr <- colorRampPalette(c("dark red","red","pink")) (100)
+plot(p224r63_2011$B3_sre, col=clr)
+
+clnir <- colorRampPalette(c("orange","red","yellow")) (100)
+plot(p224r63_2011$B4_sre, col=clnir)
