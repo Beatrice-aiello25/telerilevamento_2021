@@ -37,7 +37,7 @@ plot(p224r63_2011, col= cl)
 library(raster)
 
 # Indicare la cartella da cui estrarre i dati
-setwd(C:/lab/")
+setwd("C:/lab/")
 
 # Bande Landsat
 # B1: blu
@@ -51,13 +51,17 @@ setwd(C:/lab/")
 # funzione dev.off ripulisce la grafica
 dev.off()
 
+# Funzione brick per importare i dati
+p224r63_2011 <- brick("p224r63_2011_masked.grd")
+
+
 # Funzione plot
 plot(p224r63_2011$B1_sre)
 
 # plot band 1 with a predefined colut ramp palette
 
 # Funzione colorRampPalette stabilisce una determinata palette di colori
-cl <- colorRampPalette(c("blue", "turquoise", "light blue", "dark blue"))(100)
+cl <- colorRampPalette(c("blue", "light blue", "dark blue"))(100)
 
 # Funzione plot 
 plot(p224r63_2011$B1_sre, col= cl)
@@ -82,7 +86,7 @@ plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
 
 # 2 riga, 1 colonne
-par(mfrow=c(2,1))
+par(mfcol=c(2,1))
 plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
 
@@ -104,10 +108,27 @@ plot(p224r63_2011$B4_sre)
 par(mfrow=c(2,2))
 
 # Cambio la colorazione delle bande
-clb <- colorRampPalette(c("turquoise", "light blue", "dark blue"))(100)
+clb <- colorRampPalette(c("dark blue", "light blue", "blue"))(100)
 plot(p224r63_2011$B1_sre, col=clb)
 
 clg <- colorRampPalette(c("green", "light green", "dark green"))(100)
+plot(p224r63_2011$B2_sre, col=clg)
+
+clr <- colorRampPalette(c("dark red","red","pink")) (100)
+plot(p224r63_2011$B3_sre, col=clr)
+
+clnir <- colorRampPalette(c("orange","red","yellow")) (100)
+plot(p224r63_2011$B4_sre, col=clnir)
+
+
+# distribuzione quadrata delle bande, 2 righe, 2 colonne
+par(mfrow=c(2,2))
+
+# Cambio la colorazione delle bande
+clb <- colorRampPalette(c("dark blue", "light blue", "blue"))(100)
+plot(p224r63_2011$B1_sre, col=clb)
+
+clg <- colorRampPalette(c("dark green", "light green", "green"))(100)
 plot(p224r63_2011$B2_sre, col=clg)
 
 clr <- colorRampPalette(c("dark red","red","pink")) (100)
