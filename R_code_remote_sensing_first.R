@@ -136,3 +136,66 @@ plot(p224r63_2011$B3_sre, col=clr)
 
 clnir <- colorRampPalette(c("orange","red","yellow")) (100)
 plot(p224r63_2011$B4_sre, col=clnir)
+
+### DAY 4
+
+# Visualizzazione dati in RGB
+
+# Funzione library per richiamare il pacchetto raster
+library(raster)
+
+# Indicare la cartella da cui estrarre i dati
+ setwd("C:/lab/")
+
+# Funzione brick per importare i dati
+p224r63_2011 <- brick("p224r63_2011_masked.grd")
+
+# Bande Landsat
+# B1: blu
+# B2: verde
+# B3: rosso
+# B4: infrarosso vicino
+# B5: infrarosso medio
+# B6: infrarosso termico
+# B7: infrarosso medio
+
+# Funzione plotRGB 
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+
+# Funzione plotRGB 2
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+
+# Funzione plotRGB 3
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+
+# Funzione plotRGB 4
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+
+# Exercise: mount a 2x2 multiframe
+
+# distribuzione quadrata delle bande, 2 righe, 2 colonne
+par(mfrow=c(2,2))
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+
+# Genero il mio pdf
+pdf("il_mio_primo_pdf_con_R.pdf")
+par(mfrow=c(2,2))
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
+dev.off()
+
+# Funzione stretch
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
+
+# Genero il mio multiframe con la funzione par: immagine colori naturali, immagine falsi colori, immagine histogram stretching
+par(mfrow=c(3,1))
+plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
+plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
+ 
