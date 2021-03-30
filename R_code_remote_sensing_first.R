@@ -199,3 +199,10 @@ plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
  
+#### DAY 5
+
+# Codice per installazione pacchetti aggiuntivi RStoolbox
+install.packages("RStoolbox")
+
+# Funzione library per richiamare il pacchetto RStoolbox
+library(RStoolbox)
