@@ -42,4 +42,50 @@ plot(TGr)
 plotRGB(TGr, 1, 2, 3, stretch="Lin")
 plotRGB(TGr, 2, 3, 4, stretch="Lin")
 
+## DAY 9
+
+# Funzione library per richiamare il pacchetto raster
+library(rasterVis)
+
+# Indicare la cartella da cui estrarre i dati
+setwd("C:/lab/greenland") 
+
+
+rlist <- list.files(pattern="lst")
+
+rlist import <- lapply(rlist,raster)
+
+import TGr <- stack(import)
+
+TGr
+
+# Funzione levelplot
+levelplot(TGr)
+
+
+cl <- colorRampPalette(c("purple","dark red","pink","red"))(100)
+levelplot(TGr, col.regions=cl)
+
+# Funzione per cambiare nome ad ogni livello
+levelplot(TGr,col.regions=cl, names.attr=c("July 2000","July 2005", "July 2010", "July 2015"))
+
+# Comando per inserire titolo al complesso di grafici
+levelplot(TGr,col.regions=cl, main="LST variation in time",
+          names.attr=c("July 2000","July 2005", "July 2010", "July 2015"))
+
+# Melt Greenland
+
+meltlist <- list.files(pattern="melt")
+
+melt_import <- lapply(meltlist,raster)
+melt<- stack(melt_import)
+melt
+levelplot(melt)
+
+melt_amount <- melt$X2007annual_melt - melt$X1979annual_melt
+clb <- colorRampPalette(c("blue","white","red"))(100)
+plot(melt_amount, col=clb)
+
+install.packages("knitr")
+
 
