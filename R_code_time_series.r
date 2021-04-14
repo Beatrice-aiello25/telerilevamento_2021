@@ -88,4 +88,13 @@ plot(melt_amount, col=clb)
 
 install.packages("knitr")
 
+#### Copernicus
+ install.packages("ncdf4")
+
+library(raster)
+library(ncdf4)
+
+setwd("C:/lab/")
+
+
 
