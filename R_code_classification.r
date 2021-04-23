@@ -37,6 +37,41 @@ suns <- brick("The_Sun_png.png")
 sunr <- unsuperClass(suns, nClasses=10)
 plot(sunr$map)
 
+## Grand Canyon Landsat
+# https://landsat.visibleearth.nasa.gov/view.php?id=80948
+
+#Funzione library per richiamare il pacchetto che ci interessa
+library(raster)
+library(RStoolbox)
+# setto della working directory, indicando la cartella da cui estrarre i dati
+setwd("C:/lab/")
+
+# funzione brick per inserire l'immagine in RGB
+gc <- brick("dolansprings_oli_2013088_canyon_lrg.jpg")
+# funzione plot per visualizzare i livelli con RGB
+plotRGB(gc, r=1, g=2, b=3, stretch="lin")
+plotRGB(gc, r=1, g=2, b=3, stretch="hist")
+
+# Classificazione non supervisionata,funzione unsuperClass 
+gcc2 <- unsuperClass(gc, nClasses=2)
+gcc2
+plot(gcc2$map)
+
+gcc3 <- unsuperClass(gc, nClasses=4)
+gcc3
+plot(gcc3$map)
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
