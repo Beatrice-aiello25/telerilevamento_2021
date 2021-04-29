@@ -33,10 +33,10 @@ p224_2011res_pca <- rasterPCA(p224_2011res)
 summary(p224_2011res_pca$model)
 
 # funzione plot per visualizzare l'immagine
-plot(p224_2011res_pca$map, r=1, g=2, b=3, stretch=”lin”)
+plot(p224_2011res_pca$map)
 
-
-
+# funzione plot per visualizzare l'immagine
+plotRGB(p224_2011res_pca$map, r=1, g=2, b=3, stretch=”lin”)
 
 
 
