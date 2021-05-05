@@ -1,4 +1,4 @@
-##### R_code_land_cover_temp.r
+### R_code_land_cover_temp.r
 
 
 
