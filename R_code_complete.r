@@ -21,25 +21,25 @@
 
 # il mio primo codice in R per il telerilevamento!
 
+#la funzione sewd (set working directory) serve a richiamare una specifica cartella di lavoro (directory), in questo caso è "lab", inoltre utilizziamo le virgolette perchè usciamo fuori da R
+setwd("C:/lab/")
+
 # Codice per installazione pacchetti aggiuntivi raster
 install.packages("raster")
 
-# Funzione library per richiamare il pacchetto raster
+# Funzione library per richiamare il pacchetto raster precedentemente installato
 library(raster)
 
-# Indicare la cartella da cui estrarre i dati
-library(raster)
-
-# Funzione brick per importare i dati
+# Funzione brick ci permette di importare i dati presenti nell cartella lab
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
 
-# Funzione per avere informazioni sulle bande
+# scrivendo il nome dell'oggetto è possibile ottenere tutte le caratteristiche, come ad esempio le informazioni sulle bande dell'immagine
 p224r63_2011
 
 # Funzione plot immagini per visualizzare le varie bande 
 plot(p224r63_2011) 
 
-# Funzione colorRampPalette stabilisce una determinata palette di colori
+# Funzione colorRampPalette stabilisce una determinata palette di colori. è necessario associare un nome ad ogni funzione. il 100 sta ad indicare il numero di livelli delle bande, maggiore è questo numero, maggiori saranno le sfumature dell'immagine 
 cl <- colorRampPalette(c("black", "grey", "light grey"))(100)
 
 # Funzione plot 
@@ -52,13 +52,6 @@ plot(p224r63_2011, col= cl)
 # Funzione plot colour change new2
 cl <- colorRampPalette(c("blue", "green", "orange", "red", "light blue", "purple"))(100)
 plot(p224r63_2011, col= cl)
-
-##### DAY 3
-# Funzione library per richiamare il pacchetto raster
-library(raster)
-
-# Indicare la cartella da cui estrarre i dati
-setwd("C:/lab/")
 
 # Bande Landsat
 # B1: blu
@@ -74,33 +67,27 @@ dev.off()
 
 # Funzione brick per importare i dati
 p224r63_2011 <- brick("p224r63_2011_masked.grd")
-
-
-# Funzione plot
+# utilizzo il simbolo $ per associare due oggetti, ad esempio plottiamo l'immagine p224r63_2011 con la sola banda del blu 
 plot(p224r63_2011$B1_sre)
-
-# plot band 1 with a predefined colut ramp palette
-
+# plot band 1 with a predefined colorRampPalette
 # Funzione colorRampPalette stabilisce una determinata palette di colori
 cl <- colorRampPalette(c("blue", "light blue", "dark blue"))(100)
-
 # Funzione plot 
 plot(p224r63_2011$B1_sre, col= cl)
-
 # Funzione plot colour change new
 cl <- colorRampPalette(c("blue", "turquoise", "light blue", "dark blue"))(100)
 plot(p224r63_2011$B1_sre, col= cl)
-
 # funzione dev.off ripulisce la grafica
 dev.off()
 
 # Funzione plot
 plot(p224r63_2011$B1_sre)
-
 # Funzione plot
 plot(p224r63_2011$B2_sre)
 
-# Funzione par permette di personalizzare la visualizzazione delle bande 
+# Funzione par permette di plottare e personalizzare la visualizzazione delle bande. ciò che viene fuori è un multiframe ovvero la proiezione di due o più bande insieme 
+# con "mfrow" inseriamo prima le righe
+# con "mcol" inseriamo prima le colonne
 # 1 riga, 2 colonne
 par(mfrow=c(1,2))
 plot(p224r63_2011$B1_sre)
@@ -111,7 +98,7 @@ par(mfcol=c(2,1))
 plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
 
-# Plot le prime 4 bande di landsat
+# Proietto le prime 4 bande di landsat
 par(mfrow=c(4,1))
 plot(p224r63_2011$B1_sre)
 plot(p224r63_2011$B2_sre)
@@ -141,59 +128,22 @@ plot(p224r63_2011$B3_sre, col=clr)
 clnir <- colorRampPalette(c("orange","red","yellow")) (100)
 plot(p224r63_2011$B4_sre, col=clnir)
 
-
-# distribuzione quadrata delle bande, 2 righe, 2 colonne
-par(mfrow=c(2,2))
-
-# Cambio la colorazione delle bande
-clb <- colorRampPalette(c("dark blue", "light blue", "blue"))(100)
-plot(p224r63_2011$B1_sre, col=clb)
-
-clg <- colorRampPalette(c("dark green", "light green", "green"))(100)
-plot(p224r63_2011$B2_sre, col=clg)
-
-clr <- colorRampPalette(c("dark red","red","pink")) (100)
-plot(p224r63_2011$B3_sre, col=clr)
-
-clnir <- colorRampPalette(c("orange","red","yellow")) (100)
-plot(p224r63_2011$B4_sre, col=clnir)
-
-### DAY 4
-
-# Visualizzazione dati in RGB
-
-# Funzione library per richiamare il pacchetto raster
-library(raster)
-
-# Indicare la cartella da cui estrarre i dati
- setwd("C:/lab/")
-
-# Funzione brick per importare i dati
-p224r63_2011 <- brick("p224r63_2011_masked.grd")
-
-# Bande Landsat
-# B1: blu
-# B2: verde
-# B3: rosso
-# B4: infrarosso vicino
-# B5: infrarosso medio
-# B6: infrarosso termico
-# B7: infrarosso medio
-
-# Funzione plotRGB 
+# Funzione plotRGB crea un grafico a tre bande (rosso, verde, blu), viene inoltre utilizzata per proiettare immagini a "colori reali" da landsat o altri satelliti, ma devono rispettare un ordine ben preciso (3,2,1)
+#la funzione stretch serve a visualizzare le bande inserite da 0 a 1, anche laddove queste non coprano tutto il campo da 0 a 1 
+#in questo caso l'infrarosso vicino è montato sulla banda del rosso (e cosi viene visualizzato), il rosso su quella del verde ed il verde su quella del blu. la banda del blu viene cosi non considerata (si possono visualizzare solo 3 bande per volta).
+plotRGB(p224r63_2011,r=4,g=3,b=2,stretch="Lin")
+# qui di seguito le bande vengono montate nell'ordine di visualizzazione delle immagini a "colori reali"
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
 
 # Funzione plotRGB 2
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
-
 # Funzione plotRGB 3
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
-
 # Funzione plotRGB 4
+# montando le bande in questo modo l'infrarosso vicino viene visualizzato come verde, la parte viola rappresenta invece il suolo nudo in questo tipo di montaggio.
 plotRGB(p224r63_2011, r=3, g=2, b=4, stretch="Lin")
-
+# A seconda di come vengono montate le bande avremo visualizzazioni differenti, alcuni elementi verranno visualizzati meglio in particolari combinazioni rispetto ad altre
 # Exercise: mount a 2x2 multiframe
-
 # distribuzione quadrata delle bande, 2 righe, 2 colonne
 par(mfrow=c(2,2))
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
@@ -219,27 +169,9 @@ par(mfrow=c(3,1))
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="Lin")
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="Lin")
 plotRGB(p224r63_2011, r=3, g=4, b=2, stretch="hist")
- 
-#### DAY 5
 
 # Codice per installazione pacchetti aggiuntivi RStoolbox
 install.packages("RStoolbox")
-
-# Funzione library per richiamare il pacchetto RStoolbox
-library(RStoolbox)
-
-
-#### DAY 6
-
-# Funzione library per richiamare il pacchetto raster
-library(raster)
-
-# Indicare la cartella da cui estrarre i dati
-setwd("C:/lab/")
-
-# Funzione brick per importare i dati
-p224r63_2011 <- brick("p224r63_2011_masked.grd")
-p224r63_2011
 
 # Multitemporal set
 # Funzione brick per importare i dati
@@ -270,12 +202,15 @@ plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
 plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
 
 # hist
+# attraverso lo strecth "hist" è possibile stretchare ancora di più i valori centrali, permettendo cosi di evidenziare meglio differenze all'interno del patch forestale.
+# negli studi di vegetazione l'infrarosso vicino viene montato sulla componente red, non c'è una visualizzazione migliore di altre.
 par(mfrow=c(2,2))
 plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
 plotRGB(p224r63_2011, r=4, g=3, b=2, stretch="Lin")
 plotRGB(p224r63_1988, r=3, g=2, b=1, stretch="hist")
 plotRGB(p224r63_2011, r=3, g=2, b=1, stretch="hist")
 # hist
+# genero quindi in pdf in cui sono raccolte le immagini del 1988 e del 2011 in RGB
 pdf("multitemp.pdf")
 par(mfrow=c(2,2))
 plotRGB(p224r63_1988, r=4, g=3, b=2, stretch="Lin")
@@ -300,7 +235,7 @@ library(raster)
 # Indicare la cartella da cui estrarre i dati
 setwd("C:/lab/greenland") 
 
-# Funzione raster per caricare i singoli dati 
+# Funzione raster per caricare i singoli dati, a differenza della funzione "bricck" che permette di caricare pacchetti di dati, multiple layer
 lst_2000 <- raster ("lst_2000.tif")
 
 # Funzione plot
@@ -310,7 +245,7 @@ lst_2005 <- raster ("lst_2005.tif")
 plot(lst_2005)
 lst_2010 <- raster ("lst_2010.tif")
 lst_2015 <- raster ("lst_2015.tif")
-
+# funzione par
 par(mfrow=c(2,2))
 plot(lst_2000)
 plot(lst_2005)
@@ -319,51 +254,37 @@ plot(lst_2015)
 
 # Funzione list.files crea una lista di file
 list.files()
-
+# si utilizza la scritta 'pattern' per tutti gli oggetti che stiamo inserendo nella lista, questi devono avere un carattere comune e verranno presi di default dalla working directory
 rlist <- list.files(pattern="lst")
 rlist
 
-# Funzione lapply permette di importare la lista di file e applicarvi la funzione raster
+# Funzione lapply permette di importare la lista di file e applicarvi la stessa funzione ad una lista di file senza importarli uno per volta
 import <- lapply(rlist,raster)
-
 import
 
-# Funzione stack crea un unico pacchetto di file
+# Funzione stack permette di unire i fil e creare un unico pacchetto 
 TGr <- stack(import)
 plot(TGr)
 plotRGB(TGr, 1, 2, 3, stretch="Lin")
 plotRGB(TGr, 2, 3, 4, stretch="Lin")
-
-## DAY 9
-
-# Funzione library per richiamare il pacchetto raster
-library(rasterVis)
-
-# Indicare la cartella da cui estrarre i dati
-setwd("C:/lab/greenland") 
-
-
 rlist <- list.files(pattern="lst")
-
 rlist import <- lapply(rlist,raster)
-
 import TGr <- stack(import)
-
 TGr
 
 # Funzione levelplot
 levelplot(TGr)
-
-
 cl <- colorRampPalette(c("purple","dark red","pink","red"))(100)
+# levelplot ci fornisce un layout maggiormente chiaro rispetto al solo plot (in questo specifico caso), permettendoci una migliore analisi multitemporale.
+# gli strati di una immagine stack si chiamano attributi (in TGr abbiamo 4 attributi: lst_20-00/05/10/15).
 levelplot(TGr, col.regions=cl)
-
 # Funzione per cambiare nome ad ogni livello
+# è possibile modificare il layout del levelplot andando a modificare gli attributi negli argomenti della funzione levelplot. 
+# nel caso specifico del rasterstack TGr, se si vogliono modificare i titoli delle immagini (di default uguali ai nomi dei singoli file) si agisce sull'argomento names.attr che serve a nominare i singoli attributi.
 levelplot(TGr,col.regions=cl, names.attr=c("July 2000","July 2005", "July 2010", "July 2015"))
 
-# Comando per inserire titolo al complesso di grafici
-levelplot(TGr,col.regions=cl, main="LST variation in time",
-          names.attr=c("July 2000","July 2005", "July 2010", "July 2015"))
+# attraverso la funzione main posso inserire titolo al complesso di grafici
+levelplot(TGr,col.regions=cl, main="LST variation in time",names.attr=c("July 2000","July 2005", "July 2010", "July 2015"))
 
 # Melt Greenland
 
@@ -390,10 +311,8 @@ levelplot(melt_amount, col.regions=clb)
 library(raster)
 library(ncdf4)
 
-setwd("~/lab/") # Linux
-# setwd("C:/lab/") # Windows
-# setwd("/Users/name/Desktop/lab/") # Mac 
-
+# set della working directory
+setwd("C:/lab/") # Windows
 albedo <- raster("c_gls_ALBH_202006130000_GLOBE_PROBAV_V1.5.1.nc")
 
 cl <- colorRampPalette(c('light blue','green','red','yellow'))(100) # 
@@ -407,6 +326,7 @@ plot(albedores, col=cl)
 
 # 4. R code knitr
 #R_code_knitr.r
+#il pacchetto knitr permette di generare report
 
 # Indico la cartella da cui estrarre i dati
 setwd("C:/lab)
@@ -436,16 +356,19 @@ setwd("C:/lab/")
 # Funzione brick
 p224_2011 <- brick("p224r63_2011_masked.grd")
 plot(p224_2011)
-# mi indica tutte le informazioni sull'immagine
+# mi indica tutte le informazioni e le caratteristiche dell'immagine
 p224_2011
 
 # funzione plot
 plot(p224_2011$B1_sre, p224_2011$B2_sre, col="red", pch=19, cex=2)
 plot(p224_2011$B2_sre, p224_2011$B1_sre, col="red", pch=19, cex=2)
+# La banda 1 e la banda 2 sono strettamente correlate tra di loro perché il loro indice di correlazione (indice di Pearson) è 0,93, più è vicino a 1, maggiore sarà il loro grado di correlazione. La PC1 passa per il gradiente più grande, che spiegherà la variabilità maggiore, rispetto alla PC2, per cui questo sistema mi permette di ridurre il sistema da due bande, a una sola
 # funzione pairs mette in correlazione a due a due le variabili di un certo dataset
 pairs(p224_2011)
 
 # funzione aggregate, aggrega i pixel facendo una media con l’obiettivo di diminuire la risoluzione dell'immagine, aumentando la dimensione del pixel
+# fact rappresenta il valore di quanto vogliamo diminuire la risoluzione
+# res: resampling
 p224_2011res <- aggregate(p224_2011, fact=10)
 
 # funzione plot per visualizzare l'immagine
@@ -453,17 +376,19 @@ par(mfrow=c(2,1))
 plotRGB(p224_2011, r=4, g=3, b=2, stretch=”lin”)
 plotRGB(p224_2011res, r=4, g=3, b=2, stretch=”lin”)
 
-# funzione rasterPCA (Principal component analysis) : prende il pacchetto di dati e lo compatta in un numero minore di bande
+# funzione rasterPCA (Principal component analysis) : prende il pacchetto di dati e lo compatta in un numero minore di bande, dà come risultato una mappa e un modello
 p224_2011res_pca <- rasterPCA(p224_2011res)
 
-# Funzione summary ci dà un sommario per il nostro modello, utilizzo il $ per legare due componenti
+# Funzione summary ci dà un sommario per il nostro modello, utilizzo il $ per legare due componenti, in questo modo ci dà informazioni rispetto alle proporzioni delle componenti per spiegare la varianza 
+#la prima componente è sempre quella che spiega la maggiore variabilità
 summary(p224_2011res_pca$model)
 
-# funzione plot per visualizzare l'immagine
+# funzione plot associata a '$map' per visualizzare le immagini dopo l'analisi multivariata 
 plot(p224_2011res_pca$map)
 
 # funzione plot per visualizzare l'immagine
 plotRGB(p224_2011res_pca$map, r=1, g=2, b=3, stretch=”lin”)
+# il verde rappresenta la neve e il blu indicano le praterie d'alta quota 
 
 #---------------------------------------------------
 
@@ -475,26 +400,23 @@ setwd("C:/lab/")
 library(raster)
 library(RStoolbox)
 
-# funzione brick ci permette di importare un'immagine dall'esterno
+# funzione brick ci permette di importare un'immagine dall'esterno di R
 so <- brick("Solar_Orbiter_s_first_views_of_the_Sun_pillars.jpg")
 
 # visualizzare i livelli con RGB
 plotRGB(so, 1, 2, 3, stretch="lin")
-
 install.packages("RStoolbox")
 library(RStoolbox)
-
+# Maximum likelihood, ovvero massimogrado di somiglianza-> un pixel viene assegnato ad una classe di appartanenza rispetto alla riflettanza nelle varie bande,si calcola la distanza del centroide delle diverse nuvole, verrà quindi assegnato alla nuvola di pixel con la distanza minore. 
+#ciò viene fatto attraverso una classificazione non-supervisionata-> compiuta attraverso i training-set (pixel guida scelti dal software) il cui numero è fissato dall'operatore, cosi come il numero delle classi
 # Classificazione non supervisionata,funzione unsuperClass 
 soc <- unsuperClass(so, nClasses=3)
-
 # Funzione plot
 plot(soc$map)
-
 # Classificazione non supervisionata,funzione unsuperClass con 20 classi 
 set.seed(42)
 sor <- unsuperClass(so, nClasses=20)
 plot(sor$map)
-
 # Dowload an image from: 
 #https://www.esa.int/ESA_Multimedia/Missions/Solar_Orbiter/(result_type)/images
 
@@ -510,16 +432,11 @@ plot(sunr$map)
 ## Grand Canyon Landsat
 # https://landsat.visibleearth.nasa.gov/view.php?id=80948
 
-#Funzione library per richiamare il pacchetto che ci interessa
-library(raster)
-library(RStoolbox)
-# setto della working directory, indicando la cartella da cui estrarre i dati
-setwd("C:/lab/")
-
 # funzione brick per inserire l'immagine in RGB
 gc <- brick("dolansprings_oli_2013088_canyon_lrg.jpg")
 # funzione plot per visualizzare i livelli con RGB
 plotRGB(gc, r=1, g=2, b=3, stretch="lin")
+# hist crea un effetto ancora più ampio di stretch
 plotRGB(gc, r=1, g=2, b=3, stretch="hist")
 
 # Classificazione non supervisionata,funzione unsuperClass 
@@ -566,6 +483,7 @@ library(RStoolbox)
 setwd("C:/lab/")
 
 #funzione brick per importare i dati
+# immagini la cui banda dell'infrarosso è montata sulla componente rossa
 defor1 <- brick ("defor1.jpg")
 defor2 <- brick("defor2.jpg")
 
@@ -610,13 +528,13 @@ cld <- colorRampPalette(c('blue','white','red'))(100)
 plot(difdvi, col=cld)
 
 # andiamo a calcolare l'NDVI
-# (NIR-RED) / (NIR+RED)
+# NDVI=(NIR-RED) / (NIR+RED)
+# è necessario scrivere le operazioni tra parentesi 
 # andiamo a legare le variabili con il $
 ndvi1 <- (defor1$defor1.1-defor1$defor1.2)/ (defor1$defor1.1+defor1$defor1.2)
 plot(ndvi1, col=cl)
 
 # RStoolbox 
-
 ndvi2 <- (defor2$defor2.1-defor2$defor2.2)/ (defor2$defor2.1+defor2$defor2.2)
 plot(ndvi2, col=cl)
 par(mfrow=c(2,1))
@@ -630,6 +548,9 @@ plot(vi1, col=cl)
 vi2 <- spectralIndices(defor2, green=3, red=2, nir=1)
 plot(vi2, col=cl)
 
+# La zona tra il rosso e l’infrarosso viene definita red edge più è alta questa pendenza più sana la vegetazione, se la vegetazione sta morendo non fa più fotosintensi, non assorbono più perché le cellule a palizzata collassano, diminuisce la pendenza.
+Red edge ->maggiore è questo valore maggiore sarà la qualità dello stato di salute della vegetazione
+
 # calcolo la differenza delle due NDVI
 difndvi <- ndvi1 - ndvi2
 
@@ -642,12 +563,13 @@ plot(difndvi, col=cld)
 
 # 9. R code land cover
 
-### R_code_land_cover_temp.r
+## R_code_land_cover_temp.r
 
 library(raster)
 library(RStoolbox)
 #install.packages("ggplot2") funziona con qualsiasi dataset
 library(ggplot2)
+# gridExtra -> multiframe con ggplot 
 library(gridExtra)
 # Set della working directory 
 setwd("C:/lab/")
@@ -675,21 +597,8 @@ library(gridExtra)
 # multiframe con ggplot2 e gridExtra
 p1 <- ggRGB(defor1, r=1, g=2, b=3, stretch="lin")
 p2 <- ggRGB(defor2, r=1, g=2, b=3, stretch="lin")
+# la funzione grid.arrange permette di unire due plot distinti in uno unico
 grid.arrange(p1,p2, nrow=2)
-
-## 07/05
-
-# inserisco le librerie che mi serviranno 
-library(raster)
-library(RStoolbox)
-library(ggplot2)
-
-# Set della working directory 
-setwd("C:/lab/")
-
-# funzione brick per importare i dati
-defor1 <- brick("defor1.jpg")
-defor2 <- brick("defor2.jpg")
 
 # classificazione non supervisionata
 d1c <- unsuperClass(defor1, nClasses=2)
@@ -697,7 +606,7 @@ plot(d1c$map)
 # classe 1: forest
 # classe 2: agriculture
 
-# set.seed() would allow you to attain the same results ...
+# set.seed() permette di raggiungere gli stessi risultati nonostante la classificazione avvenga in maniera randomica
 
 d2c <- unsuperClass(defor2, nClasses=2)
 plot(d2c$map)
@@ -732,7 +641,7 @@ prop2
 cover <- c("Forest", "Agriculture")
 percent_1999 <- c(89.93, 10.07)
 percent_2006 <- c(52.13, 47.87)
-
+# la funzione data.frame 
 percentages <- data.frame(cover, percent_1999, percent_2006)
 
 # dataframe creato
