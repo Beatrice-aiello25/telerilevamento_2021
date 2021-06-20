@@ -235,7 +235,7 @@ library(raster)
 # Indicare la cartella da cui estrarre i dati
 setwd("C:/lab/greenland") 
 
-# Funzione raster per caricare i singoli dati, a differenza della funzione "bricck" che permette di caricare pacchetti di dati, multiple layer
+# Funzione raster per caricare i singoli dati, a differenza della funzione "brick" che permette di caricare pacchetti di dati, multiple layer
 lst_2000 <- raster ("lst_2000.tif")
 
 # Funzione plot
@@ -492,13 +492,13 @@ par(mfrow=c(2,1))
 plotRGB(defor1, r=1, g=2, b=3, stretch="lin") 
 plotRGB(defor2, r=1, g=2, b=3, stretch="lin")
 
-# Indice di vegetazione time 1
+# Indice di vegetazione time 1 
 # andiamo a cacolare la differenza tra la banda del NIR e la banda del rosso, informazioni che ricavo scrivendo defor1 su R
 # uso il $ per associare il nome dell'immagine alla banda NIR e alla banda del rosso
 # per ogni pixel prendiamo il suo valore nell'infrarosso e nel rosso e calcoliamo la loro differenza 
 dvi1 <- defor1$defor1.1-defor1$defor1.2
 # dev.off()
-plot(dvi1)
+
 
 # Cambio colorazione per la visualizzazione dell'immagine utilizzando la colorRampPalette time 1
 cl <- colorRampPalette(c('darkblue', 'yellow', 'red', 'black'))(100)
