@@ -34,5 +34,28 @@ plot(EN0001, col=clr, main="NO2 in January")
 plot(EN0013, col=clr, main="NO2 in March")
 plot(ENdif, col=clr, main="Difference between January - March")
 
+# fase 6: importare tutto il set di dati
+rlist <- list.files(pattern="EN")
+import <- lapply(rlist,raster)
+import
+# funzione stack 
+NO2 <- stack(import)
+plot(NO2)
+
+# fase 7: replicare il plot delle immagini 1 e 13
+
+par(mfrow=c(2,1))
+plot(NO2$EN_0001, col=clr)
+plot(NO2$EN_0013, col=clr)
+# fase 8: calcolo della PCA
+NO2_pca <- rasterPCA(NO2)
+
+summary(NO2_pca$model)
+
+plotRGB(NO2_pca$map, r=1, g=2, b=3, stretch=”lin”)
+
+# fase 8: calcolo la variabilità della prima componente (deviazione standard)
+PC1sd<- focal(NO2_pca$map$PC1, w=matrix(1/9, nrow=3,ncol=3), fun=sd)
+plot(PC1sd, col=clr)
 
 
