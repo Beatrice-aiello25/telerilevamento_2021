@@ -642,6 +642,7 @@ cover <- c("Forest", "Agriculture")
 percent_1999 <- c(89.93, 10.07)
 percent_2006 <- c(52.13, 47.87)
 # la funzione data.frame 
+# creo un dataframe a tre colonne, la copertura vegetale, la percentuale nel 1999 e la percentuale nel 2006 
 percentages <- data.frame(cover, percent_1999, percent_2006)
 
 # dataframe creato
