@@ -14,7 +14,7 @@
 # 8. R code vegetation indices 
 # 9. R code land cover
 # 10. R code variability
-# 11. R_code_spectral_signatures
+# 11. R code spectral signatures
 
 #---------------------------------------------------
 
@@ -458,8 +458,10 @@ library(RStoolbox)
 library(ggplot2)
 library(gridExtra)
 
-setwd("~/lab/")
+# set della working directory indicando la cartella da cui andrò a prendere i dati
+setwd("C:/lab/")
 
+#funzione brick per importare i dati
 p224r63 <- brick("p224r63_2011_masked.grd")
 
 ggRGB(p224r63,3,2,1, stretch="lin")
