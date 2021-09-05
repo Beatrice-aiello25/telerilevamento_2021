@@ -9,6 +9,7 @@ library(raster)
 library(rasterVis)
 library(rgdal)
 library(ggplot2)
+library(RStoolbox)
 
 setwd("C:/lab/NPY") #Windows
 
@@ -319,9 +320,105 @@ ggplot(percentages, aes(x=cover, y=percent_1992, color=cover)) + geom_bar(stat="
 ggplot(percentages, aes(x=cover, y=percent_2014, color=cover)) + geom_bar(stat="identity", fill="white")
 ggplot(percentages, aes(x=cover, y=percent_2019, color=cover)) + geom_bar(stat="identity", fill="white")
 
-p1<- gggplot(percentages, aes(x=cover, y=percent_1989, color=blue)) + geom_bar(stat="identity", fill="yellow")
+p1<- gggplot(percentages, aes(x=cover, y=percent_1989, color=blue)) + geom_bar(stat="identity", fill=I("grey50"))
 p2<- ggplot(percentages, aes(x=cover, y=percent_1992, color=blue)) + geom_bar(stat="identity", fill="yellow")
 p3<- ggplot(percentages, aes(x=cover, y=percent_2014, color=blue)) + geom_bar(stat="identity", fill="yellow")
 p4<- ggplot(percentages, aes(x=cover, y=percent_2019, color=blue)) + geom_bar(stat="identity", fill="yellow")
 
 grid.arrange(p1, p2,p3, p4, nrow=2)
+
+ggplot(mpg, aes(y = class)) + geom_bar(aes(fill = drv), position = position_stack(reverse = TRUE))
+
+p1<- gggplot(percentages, aes(x=cover, y=percent_1989, color=blue)) + geom_bar(aes(fill = drv))
+p2<- gggplot(percentages, aes(x=cover, y=percent_1989, color=blue)) + geom_bar(aes(fill = drv))
+p3<- gggplot(percentages, aes(x=cover, y=percent_1989, color=blue)) + geom_bar(aes(fill = drv))
+p4<- gggplot(percentages, aes(x=cover, y=percent_1989, color=blue)) + geom_bar(aes(fill = drv))
+
+
+# 2. Principal component analysis
+
+# PCA of Yellowstone in 1987
+yellowstone_1987<-brick("Yellowstone_19870805_lrg.jpg")
+yellowstone_1987_pca <- rasterPCA(yellowstone_1987)
+summary(yellowstone_1987_pca$model)
+# Importance of components:
+#                           Comp.1      Comp.2     Comp.3
+# Standard deviation     80.6695408 23.73591028 17.2899836
+# Proportion of Variance  0.8829922  0.07644507  0.0405627
+# Cumulative Proportion   0.8829922  0.95943730  1.0000000
+plotRGB(yellowstone_1987_pca$map,r=1,g=2,b=3, stretch="Hist")
+plot(yellowstone_1987_pca$model) #For see the graphic
+
+# PCA of Yellowstone in 1989
+yellowstone_1989_pca <- rasterPCA(yellowstone_1989)
+summary(yellowstone_1989_pca$model)
+# Importance of components:
+#                           Comp.1     Comp.2      Comp.3
+# Standard deviation     54.3967013 38.8648794 10.55508959
+# Proportion of Variance  0.6459446  0.3297348  0.02432058
+# Cumulative Proportion   0.6459446  0.9756794  1.00000000
+plotRGB(yellowstone_1989_pca$map,r=1,g=2,b=3, stretch="Hist")
+plot(yellowstone_1989_pca$model) #For see the graphic
+
+# PCA of Yellowstone in 1992
+yellowstone_1992<-brick("Yellowstone_19920802_lrg.jpg")
+yellowstone_1992_pca <- rasterPCA(yellowstone_1992)
+summary(yellowstone_1992pca$model)
+
+plotRGB(yellowstone_1992pca$map,r=1,g=2,b=3, stretch="Hist")
+plot(yellowstone_1992pca$model) #For see the graphic
+
+
+# PCA of Yellowstone in 2019
+yellowstone_2019_pca <- rasterPCA(yellowstone_2019)
+summary(yellowstone_2019_pca$model)
+# Importance of components:
+#                           Comp.1     Comp.2      Comp.3
+# Standard deviation     61.9790086 23.6047379 13.93105627
+# Proportion of Variance  0.8364219  0.1213206  0.04225754
+# Cumulative Proportion   0.8364219  0.9577425  1.00000000
+plotRGB(yellowstone_2019_pca$map,r=1,g=2,b=3, stretch="Hist")
+plot(yellowstone_2019_pca$model) #For see the graphic
+
+
+
+
+
+
+
+
+
+..............................................................................................
+
+# NBR
+
+
+yellowstone_1987 <- brick("Yellowstone_19870805_lrg.jpg")
+
+prefire <- "yellowstone_1987"
+postfire <- "yellowstone_1989"
+
+install.packages("rLandsat8")
+lspre <- ReadLandsat8(prefire)
+lspost <- ReadLandsat8(postfire)
+
+r <- 1000 * dNBR(lspre, lspost)
+
+m <- c(-Inf, -500, -1, -500, -251, 1, -251, -101, 2, -101, 99, 3, 99, 269, 
+  4, 269, 439, 5, 439, 659, 6, 659, 1300, 7, 1300, +Inf, -1)
+class.mat <- matrix(m, ncol = 3, byrow = TRUE)
+
+reclass <- reclassify(r, class.mat, right=NA)
+
+reclass <- ratify(reclass)
+rat <- levels(reclass)[[1]]
+rat$legend  <- c("NA", "Enhanced Regrowth, High", "Enhanced Regrowth, Low", "Unburned", "Low Severity", "Moderate-low Severity", "Moderate-high Severity", "High Severity")
+levels(reclass) <- rat
+
+my_col=c('white', 'green', "yellow", "black", "orange", "brown", "red", "purple")
+
+plot(reclass,col=my_col,legend=F,box=F,axes=F)
+
+legend(x='right', legend =rat$legend,fill = my_col, y='right')
+
+plot(reclass)
