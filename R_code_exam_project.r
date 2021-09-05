@@ -10,6 +10,7 @@ library(rasterVis)
 library(rgdal)
 library(ggplot2)
 library(RStoolbox)
+library(grid)
 
 setwd("C:/lab/NPY") #Windows
 
@@ -363,11 +364,38 @@ plot(yellowstone_1989_pca$model) #For see the graphic
 # PCA of Yellowstone in 1992
 yellowstone_1992<-brick("Yellowstone_19920802_lrg.jpg")
 yellowstone_1992_pca <- rasterPCA(yellowstone_1992)
-summary(yellowstone_1992pca$model)
+summary(yellowstone_1992_pca$model)
+# Importance of components:
+#                           Comp.1     Comp.2      Comp.3
+# Standard deviation     55.4420561 30.4443849 13.62554231
+# Proportion of Variance  0.7342508  0.2214013  0.04434793
+# Cumulative Proportion   0.7342508  0.9556521  1.00000000
+plotRGB(yellowstone_1992_pca$map,r=1,g=2,b=3, stretch="Hist")
+plot(yellowstone_1992_pca$model) #For see the graphic
 
-plotRGB(yellowstone_1992pca$map,r=1,g=2,b=3, stretch="Hist")
-plot(yellowstone_1992pca$model) #For see the graphic
+# PCA of Yellowstone in 1997
+yellowstone_1997<-brick("Yellowstone_19970715_lrg.jpg")
+yellowstone_1997_pca <- rasterPCA(yellowstone_1997)
+summary(yellowstone_1997_pca$model)
+# Importance of components:
+#                            Comp.1     Comp.2      Comp.3
+# Standard deviation     53.1663418 32.1895934 15.83727534
+# Proportion of Variance  0.6871417  0.2518858  0.06097246
+# Cumulative Proportion   0.6871417  0.9390275  1.00000000
+plotRGB(yellowstone_1997_pca$map,r=1,g=2,b=3, stretch="Hist")
+plot(yellowstone_1997_pca$model) #For see the graphic
 
+# PCA of Yellowstone in 2014
+yellowstone_2014<-brick("yellowstone_oli_2014291_lrg.jpg")
+yellowstone_2014_pca <- rasterPCA(yellowstone_2014)
+summary(yellowstone_2014_pca$model)
+# Importance of components:
+#                           Comp.1     Comp.2     Comp.3
+# Standard deviation     58.8659496 22.6160285 8.62257494
+# Proportion of Variance  0.8553866  0.1262603 0.01835304
+# Cumulative Proportion   0.8553866  0.9816470 1.00000000
+plotRGB(yellowstone_2014_pca$map,r=1,g=2,b=3, stretch="Hist")
+plot(yellowstone_2014_pca$model) #For see the graphic
 
 # PCA of Yellowstone in 2019
 yellowstone_2019_pca <- rasterPCA(yellowstone_2019)
@@ -380,13 +408,24 @@ summary(yellowstone_2019_pca$model)
 plotRGB(yellowstone_2019_pca$map,r=1,g=2,b=3, stretch="Hist")
 plot(yellowstone_2019_pca$model) #For see the graphic
 
+# Comparison PCA 2019 and PCA 2021 
+par(mfrow=c(2,3))
+plotRGB(yellowstone_1987_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(yellowstone_1989_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(yellowstone_1992_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(yellowstone_1997_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(yellowstone_2014_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(yellowstone_2019_pca$map,r=1,g=2,b=3, stretch="Hist")
 
+# Multiframe with ggplot
+by_1987 <- ggRGB(yellowstone_1987_pca$map,r=1,g=2,b=3, stretch="Hist")
+by_1989 <- ggRGB(yellowstone_1989_pca$map,r=1,g=2,b=3, stretch="Hist")
+by_1992 <- ggRGB(yellowstone_1992_pca$map,r=1,g=2,b=3, stretch="Hist")
+by_1997 <- ggRGB(yellowstone_1997_pca$map,r=1,g=2,b=3, stretch="Hist")
+by_2014 <- ggRGB(yellowstone_2014_pca$map,r=1,g=2,b=3, stretch="Hist")
+by_2019 <- ggRGB(yellowstone_2019_pca$map,r=1,g=2,b=3, stretch="Hist")
 
-
-
-
-
-
+grid.arrange(by_1987, by_1989, by_1992,by_1997, by_2014,by_2019,   nrow=2, main="PCA of Yellowstone 1987-2019")
 
 ..............................................................................................
 
