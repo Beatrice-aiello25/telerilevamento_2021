@@ -5,11 +5,12 @@
 
 
 #Library:
-library(raster)
-library(rasterVis)
-library(rgdal)
-library(ggplot2)
-library(RStoolbox)
+library(raster) 
+library(rasterVis) # con questa libreria posso utilizzare la funzione levelplot
+library(rgdal) # mi permette di analizzare le firme spettrali
+library(ggplot2) # mi permette l'uso delle funzioni ggplot
+library(RStoolbox)# permette l'uso della Unsupervised Classification
+library(gridExtra)   # permette l'uso e creazione di tabelle e grafici
 library(grid)
 
 setwd("C:/lab/NPY") #Windows
@@ -34,9 +35,9 @@ plotRGB(NPY, 2, 3, 4, stretch="Lin")
 # Funzione levelplot: disegna più grafici di colore falso con una singola legenda
 levelplot(NPY)
 # Cambio di colori a piacimento (colorRampPalette si può usare solo su immagine singole, non su RGB)
-clp<-colorRampPalette(c("blue","red","green","pink))(100)
+clr<-colorRampPalette(c("blue","pink","green","yellow"))(100)
 # Nuovo levelplot col cambio di colori, nome e titolo
-levelplot(NPY,col.regions=clp, main="Burn Recovery in Yellowstone ", names.attr=c("1987","1989", "1992", "1997", "2014", "2019"))
+levelplot(NPY,col.regions=clr, main="Burn Recovery in Yellowstone ", names.attr=c("1987","1989", "1992", "1997", "2014", "2019"))
 ggRGB(NPY, r=1, g=2, b=3, stretch="lin")
 
 #............................................................................................................................................................
@@ -56,7 +57,7 @@ pairs(NPY)
 yellowstone_1989<- brick("Yellowstone_19890802_lrg.jpg")
 yellowstone_2019<- brick("yellowstone_oli_2019193_lrg.jpg")
 
-# SPECTRAL SIGNATURES
+# FIRME SPETTRALI
 
 # Funzione plotRGB: yellowstone_1989
 plotRGB(yellowstone_1989, r=1, g=2, b=3, stretch="lin") # "lin": lineare, amplia i valori
@@ -162,59 +163,8 @@ ggplot(spectralst, aes(x=bande)) +
  labs(x="bande",y="reflectance")
 
 
-# DVI - NDVI
-
-# 1. DVI - Difference Vegetation Index
-
-# See how the bands of NIR and RED are called 
-yellowstone_1989
-#B1(NIR)= Yellowstone_19890802_lrg.1,; B2(RED)=Yellowstone_19890802_lrg.2
-yellowstone_2019
-#B1(NIR)=yellowstone_oli_2019193_lrg.1; B2(RED)=yellowstone_oli_2019193_lrg.2
-
-# First index of Yellowstone 1989: NIR - RED
-dvi1 <- yellowstone_1989$Yellowstone_19890802_lrg.1 - yellowstone_1989$Yellowstone_19890802_lrg.2
-plot(dvi1)
-cld <- colorRampPalette(c('darkblue','yellow','red','black'))(100)
-plot(dvi1, col=cld, main="DVI of Yellowstone in 1989 ")
-
-# First index of Yellowstone 1989: NIR - RED
-dvi2 <- yellowstone_2019$yellowstone_oli_2019193_lrg.1 - yellowstone_2019$yellowstone_oli_2019193_lrg.2
-plot(dvi2)
-cld <- colorRampPalette(c('darkblue','yellow','red','black'))(100)
-plot(dvi2, col=cld, main="DVI of Yellowstone in 2019 ")
-
-# Comparison togher for the difference
-par(mfrow=c(1,2))
-plot(dvi1, col=cld, main="DVI of Yellowstone in 1989")
-plot(dvi2, col=cld, main="DVI of Yellowstone in 2019")
-difdvi <- dvi1 - dvi2
-cldd <- colorRampPalette(c('blue','white','red'))(100)
-plot(difdvi, col=cldd)
-
-# 2. NDVI - Normalized Difference Vegetation Index
-
-# NDVI= (NIR-RED) / (NIR+RED)
-# NDVI of Yellowstone in 1989
-ndvi1 <- (dvi1) / (yellowstone_1989$Yellowstone_19890802_lrg.1 + yellowstone_1989$Yellowstone_19890802_lrg.2)
-plot(ndvi1, col=cld, main="NDVI of Yellowstone in 1989 ")
-
-# NDVI of Yellowstone in 2019
-ndvi2 <- (dvi2) / (yellowstone_2019$yellowstone_oli_2019193_lrg.1 + yellowstone_2019$yellowstone_oli_2019193_lrg.2)
-plot(ndvi2, col=cld, main="NDVI of Yellowstone in 2019 ")
-
-# Comparison togher for the difference
-par(mfrow=c(1,2))
-plot(ndvi1, col=cld, main="NDVI of Yellowstone 1989")
-plot(ndvi2, col=cld, main="NDVI of Yellowstone 2019")
-
-# Difference NDVI
-difndvi <- ndvi1 - ndvi2
-plot(difndvi, col=cldd)
-
 # LAND COVER
 
-# Funzione brick per importare i dati
 yellowstone_1989<- brick("Yellowstone_19890802_lrg.jpg")
 # plot dell'immagine importata
 plotRGB(yellowstone_1989, r=1, g=2, b=3, stretch="lin")
@@ -224,6 +174,11 @@ yellowstone_1992<- brick("Yellowstone_19920802_lrg.jpg")
 # plot dell'immagine importata
 plotRGB(yellowstone_1992, r=1, g=2, b=3, stretch="lin")
 ggRGB(yellowstone_1992, r=1, g=2, b=3, stretch="lin")
+
+yellowstone_1997<- brick("Yellowstone_19970715_lrg.jpg")
+# plot dell'immagine importata
+plotRGB(yellowstone_1997, r=1, g=2, b=3, stretch="lin")
+ggRGB(yellowstone_1997, r=1, g=2, b=3, stretch="lin")
 
 yellowstone_2014<- brick("yellowstone_oli_2014291_lrg.jpg")
 # plot dell'immagine importata
@@ -238,18 +193,20 @@ ggRGB(yellowstone_2019, r=1, g=2, b=3, stretch="lin")
 
 
 # Funzione par
-par(mfrow=c(2,2))
+par(mfrow=c(2,3))
 plotRGB(yellowstone_1989, r=1, g=2, b=3, stretch="lin")
 plotRGB(yellowstone_1992, r=1, g=2, b=3, stretch="lin")
+plotRGB(yellowstone_1997, r=1, g=2, b=3, stretch="lin")
 plotRGB(yellowstone_2014, r=1, g=2, b=3, stretch="lin")
 plotRGB(yellowstone_2019, r=1, g=2, b=3, stretch="lin")
 
 # multiframe con ggplot2 e gridExtra
 p1 <- ggRGB(yellowstone_1989, r=1, g=2, b=3, stretch="lin")
 p1.1 <- ggRGB(yellowstone_1992, r=1, g=2, b=3, stretch="lin")
+p1.3 <- ggRGB(yellowstone_1997, r=1, g=2, b=3, stretch="lin")
 p1.2 <- ggRGB(yellowstone_2014, r=1, g=2, b=3, stretch="lin")
 p2 <- ggRGB(yellowstone_2019, r=1, g=2, b=3, stretch="lin")
-grid.arrange(p1, p1.1, p1.2,p2, nrow=2)
+grid.arrange(p1, p1.1,p1.3 ,p1.2,p2, nrow=2, top="Yellowstone 1989-2019")
 
 # classificazione non supervisionata
 # la classe 1 rappresenta l'area incendiata, mentre la classe 2 identifica la vegetazione
@@ -257,10 +214,19 @@ d1y <- unsuperClass(yellowstone_1989, nClasses=4)
 plot(d1y$map)
 d1.1y <- unsuperClass(yellowstone_1992, nClasses=4)
 plot(d1.1y$map)
+d1.3y <- unsuperClass(yellowstone_1997, nClasses=4)
+plot(d1.3y$map)
 d1.2y <- unsuperClass(yellowstone_2014, nClasses=4)
 plot(d1.2y$map)
 d2y <- unsuperClass(yellowstone_2019, nClasses=4)
 plot(d2y$map)
+
+par(mfrow=c(2,3))
+plot(d1y$map, main="Land cover Yellowstone 1989-2019")
+plot(d1.1y$map, main="Land cover Yellowstone 1989-2019")
+plot(d1.3y$map,main="Land cover Yellowstone 1989-2019")
+plot(d1.2y$map,main="Land cover Yellowstone 1989-2019")
+plot(d2y$map, main="Land cover Yellowstone 1989-2019")
 
 # calcolo delle frequenze dei pixel
 freq(d1y$map)
@@ -272,21 +238,26 @@ freq(d1y$map)
 
 # somma totale dei pixel della prima immagine
 s1 <- 2112978 + 4685647 + 3308693 + 611758
-# proporzione di pixel delle due classi nella prima immagine
+# proporzione di pixel delle quattro classi 
 prop1 <- freq(d1y$map)/s1
-prop1
 # prop area incendiata: 0.1971231
 # prop foresta matura : 0.4371316
 # prop foresta estiva: 0.3086733
 # prop acqua: 0.0570719
 
 freq(d1.1y$map)
-# proporzione di pixel delle due classi nella prima immagine
 prop1.1 <- freq(d1.1y$map)/s1
 # prop area incendiata: 0.25164305
 # prop foresta matura : 0.39895220
 # prop foresta estiva: 0.29746976
 # prop acqua: 0.05193498
+
+freq(d1.3y$map)
+prop1.3 <- freq(d1.3y$map)/s1
+# prop area incendiata: 0.34191296
+# prop foresta matura : 0.38149342
+# prop foresta estiva: 0.22575276
+# prop acqua: 0.05084086
 
 freq(d1.2y$map)
 prop1.2 <- freq(d1.2y$map)/s1
@@ -306,29 +277,33 @@ prop2 <- freq(d2y$map)/s1
 cover <- c("Area incendio", "Vegetazione", "Acqua")
 percent_1989 <- c(19.71, 74.57, 5.7)
 percent_1992 <- c(25.16, 69.63, 5.2)
+percent_1997 <- c(34.19, 60.71, 5.1)
 percent_2014 <- c(25.34, 63.63, 11.01)
 percent_2019 <- c(38.37, 53.89, 7.6)
 
-percentages <- data.frame(cover, percent_1989, percent_1992, percent_2014,percent_2019)
-#    cover           percent_1989 percent_1992 percent_2014 percent_2019
-#1 Area incendio        19.71        25.16        25.34        38.37
-#2   Vegetazione        74.57        69.63        63.63        53.89
-#3         Acqua         5.70         5.20        11.01         7.60
+percentages <- data.frame(cover, percent_1989, percent_1992,percent_1997 , percent_2014,percent_2019)
+#        cover percent_1989 percent_1992 percent_1997 percent_2014 percent_2019
+# 1 Area incendio        19.71        25.16        34.19        25.34        38.37
+# 2   Vegetazione        74.57        69.63        60.71        63.63        53.89
+# 3         Acqua         5.70         5.20         5.10        11.01         7.60
+
 
 # utilizziamo ggplot2 per creare un grafico con il dataframe appena realizzato
 ggplot(percentages, aes(x=cover, y=percent_1989, color=cover)) + geom_bar(stat="identity", fill="white")
 ggplot(percentages, aes(x=cover, y=percent_1992, color=cover)) + geom_bar(stat="identity", fill="white")
+ggplot(percentages, aes(x=cover, y=percent_1997, color=cover)) + geom_bar(stat="identity", fill="white")
 ggplot(percentages, aes(x=cover, y=percent_2014, color=cover)) + geom_bar(stat="identity", fill="white")
 ggplot(percentages, aes(x=cover, y=percent_2019, color=cover)) + geom_bar(stat="identity", fill="white")
 
-p1<- gggplot(percentages, aes(x=cover, y=percent_1989, color=blue)) + geom_bar(stat="identity", fill=I("grey50"))
-p2<- ggplot(percentages, aes(x=cover, y=percent_1992, color=blue)) + geom_bar(stat="identity", fill="yellow")
-p3<- ggplot(percentages, aes(x=cover, y=percent_2014, color=blue)) + geom_bar(stat="identity", fill="yellow")
-p4<- ggplot(percentages, aes(x=cover, y=percent_2019, color=blue)) + geom_bar(stat="identity", fill="yellow")
 
-grid.arrange(p1, p2,p3, p4, nrow=2)
+lc1<- gggplot(percentages, aes(x=cover, y=percent_1989, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
+lc2<- ggplot(percentages, aes(x=cover, y=percent_1992, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
+lc3 <-ggplot(percentages, aes(x=cover, y=percent_1997, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
+lc4<- ggplot(percentages, aes(x=cover, y=percent_2014, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
+lc5<- ggplot(percentages, aes(x=cover, y=percent_2019, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
 
-ggplot(mpg, aes(y = class)) + geom_bar(aes(fill = drv), position = position_stack(reverse = TRUE))
+grid.arrange(p1, p1.1,p1.3 ,p1.2,p2, nrow=2, top="Yellowstone 1989-2019")
+
 
 p1<- gggplot(percentages, aes(x=cover, y=percent_1989, color=blue)) + geom_bar(aes(fill = drv))
 p2<- gggplot(percentages, aes(x=cover, y=percent_1989, color=blue)) + geom_bar(aes(fill = drv))
@@ -426,38 +401,8 @@ by_2014 <- ggRGB(yellowstone_2014_pca$map,r=1,g=2,b=3, stretch="Hist")
 by_2019 <- ggRGB(yellowstone_2019_pca$map,r=1,g=2,b=3, stretch="Hist")
 
 grid.arrange(by_1987, by_1989, by_1992,by_1997, by_2014,by_2019,   nrow=2, main="PCA of Yellowstone 1987-2019")
+grid.arrange(by_1987, by_1989, by_1992,by_1997, by_2014,by_2019,   nrow=2, top = textGrob("Area sottoposta ad incendio Yellowstone 1987-2019"))
+
 
 ..............................................................................................
 
-# NBR
-
-
-yellowstone_1987 <- brick("Yellowstone_19870805_lrg.jpg")
-
-prefire <- "yellowstone_1987"
-postfire <- "yellowstone_1989"
-
-install.packages("rLandsat8")
-lspre <- ReadLandsat8(prefire)
-lspost <- ReadLandsat8(postfire)
-
-r <- 1000 * dNBR(lspre, lspost)
-
-m <- c(-Inf, -500, -1, -500, -251, 1, -251, -101, 2, -101, 99, 3, 99, 269, 
-  4, 269, 439, 5, 439, 659, 6, 659, 1300, 7, 1300, +Inf, -1)
-class.mat <- matrix(m, ncol = 3, byrow = TRUE)
-
-reclass <- reclassify(r, class.mat, right=NA)
-
-reclass <- ratify(reclass)
-rat <- levels(reclass)[[1]]
-rat$legend  <- c("NA", "Enhanced Regrowth, High", "Enhanced Regrowth, Low", "Unburned", "Low Severity", "Moderate-low Severity", "Moderate-high Severity", "High Severity")
-levels(reclass) <- rat
-
-my_col=c('white', 'green', "yellow", "black", "orange", "brown", "red", "purple")
-
-plot(reclass,col=my_col,legend=F,box=F,axes=F)
-
-legend(x='right', legend =rat$legend,fill = my_col, y='right')
-
-plot(reclass)
