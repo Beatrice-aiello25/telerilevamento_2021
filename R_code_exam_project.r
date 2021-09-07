@@ -259,12 +259,12 @@ spectralst
 # Funzione geom_line: connette le osservazioni a seconda del dato che è sulla X/Y 
 # Funzione labs: modifica le etichette degli assi, le legende e il plottaggio
 ggplot(spectralst, aes(x=bande)) +
- geom_line(aes(y=area_incendiata01_anno1989), color="red") +
+ geom_line(aes(y=area_incendiata01_anno1989), color="red", size=1) +
  geom_line(aes(y=area_postincendio01_anno2019), color="green") +
- geom_line(aes(y=area_incendiata02_anno1989), color="yellow") +
+ geom_line(aes(y=area_incendiata02_anno1989), color="yellow", size=1) +
  geom_line(aes(y=area_postincendio02_anno2019), color="black") +
- geom_line(aes(y=area_incendiata03_anno1989), color="blue") +
- geom_line(aes(y=area_postincendio03_anno2019), color="lightblue") +
+ geom_line(aes(y=area_incendiata03_anno1989), color="blue", size=1) +
+ geom_line(aes(y=area_postincendio03_anno2019), color="orange") +
  labs(x="bande",y="reflectance")
 
 
@@ -432,14 +432,13 @@ ggplot(percentages, aes(x=cover, y=percent_2014, color=cover)) + geom_bar(stat="
 ggplot(percentages, aes(x=cover, y=percent_2019, color=cover)) + geom_bar(stat="identity", fill="white")
 
 # uso la funzione grid.arrange per mettere i grafici in una pagina  della libreria gridextra già installata
-lc1<- ggplot(percentages, aes(x=cover, y=percent_1989, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
-lc2<- ggplot(percentages, aes(x=cover, y=percent_1992, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
-lc3 <-ggplot(percentages, aes(x=cover, y=percent_1997, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
-lc4<- ggplot(percentages, aes(x=cover, y=percent_2014, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
-lc5<- ggplot(percentages, aes(x=cover, y=percent_2019, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
-
+lc1<- ggplot(percentages, aes(x=cover, y=percent_1989, fill=cover)) + geom_bar(stat="identity") + theme_minimal() + scale_fill_brewer(palette = "Set2")
+lc2<- ggplot(percentages, aes(x=cover, y=percent_1992, fill=cover )) + geom_bar(stat="identity") + theme_minimal() +scale_fill_brewer(palette="Set2")
+lc3 <-ggplot(percentages, aes(x=cover, y=percent_1997, fill=cover)) + geom_bar(stat="identity") + theme_minimal()+scale_fill_brewer(palette="Set2")
+lc4<- ggplot(percentages, aes(x=cover, y=percent_2014, fill=cover)) + geom_bar(stat="identity") + theme_minimal()+scale_fill_brewer(palette="Set2")
+lc5<- ggplot(percentages, aes(x=cover, y=percent_2019, fill=cover)) + geom_bar(stat="identity") + theme_minimal()+scale_fill_brewer(palette="Set2")                                                         
 grid.arrange(lc1,lc2,lc3,lc4,lc5, nrow=2, top="Yellowstone 1989-2019")
-grid.arrange(lc1,lc5, nrow=2, top="Yellowstone 1989-2019")
+
 
 ...................................................................................................................................
 
