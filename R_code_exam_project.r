@@ -42,7 +42,7 @@ ggRGB(NPY, r=1, g=2, b=3, stretch="lin")
 
 #............................................................................................................................................................
 
-# ANALISI MULTIVARIATA
+# 1. ANALISI MULTIVARIATA
 
 # Plot di tutte le correlazioni tra bande di un dataset (matrice di scatterplot di dati, non immagini)
 # La tabella riporta in diagonale le bande (sono le variabili), l'indice di correlazione varia da 0(negativo) a 1 (positivo)
@@ -57,7 +57,112 @@ pairs(NPY)
 yellowstone_1989<- brick("Yellowstone_19890802_lrg.jpg")
 yellowstone_2019<- brick("yellowstone_oli_2019193_lrg.jpg")
 
-# FIRME SPETTRALI
+# 1.1 Principal component analysis
+
+# PCA of Yellowstone in 1987
+yellowstone_1987<-brick("Yellowstone_19870805_lrg.jpg")
+yellowstone_1987_pca <- rasterPCA(yellowstone_1987)
+summary(yellowstone_1987_pca$model)
+# Importance of components:
+#                           Comp.1      Comp.2     Comp.3
+# Standard deviation     80.6695408 23.73591028 17.2899836
+# Proportion of Variance  0.8829922  0.07644507  0.0405627
+# Cumulative Proportion   0.8829922  0.95943730  1.0000000
+plotRGB(yellowstone_1987_pca$map,r=1,g=2,b=3, stretch="Hist")
+plot(yellowstone_1987_pca$model) #For see the graphic
+
+# PCA of Yellowstone in 1989
+yellowstone_1989_pca <- rasterPCA(yellowstone_1989)
+summary(yellowstone_1989_pca$model)
+# Importance of components:
+#                           Comp.1     Comp.2      Comp.3
+# Standard deviation     54.3967013 38.8648794 10.55508959
+# Proportion of Variance  0.6459446  0.3297348  0.02432058
+# Cumulative Proportion   0.6459446  0.9756794  1.00000000
+plotRGB(yellowstone_1989_pca$map,r=1,g=2,b=3, stretch="Hist")
+plot(yellowstone_1989_pca$model) #For see the graphic
+
+# PCA of Yellowstone in 1992
+yellowstone_1992<-brick("Yellowstone_19920802_lrg.jpg")
+yellowstone_1992_pca <- rasterPCA(yellowstone_1992)
+summary(yellowstone_1992_pca$model)
+# Importance of components:
+#                           Comp.1     Comp.2      Comp.3
+# Standard deviation     55.4420561 30.4443849 13.62554231
+# Proportion of Variance  0.7342508  0.2214013  0.04434793
+# Cumulative Proportion   0.7342508  0.9556521  1.00000000
+plotRGB(yellowstone_1992_pca$map,r=1,g=2,b=3, stretch="Hist")
+plot(yellowstone_1992_pca$model) #For see the graphic
+
+# PCA of Yellowstone in 1997
+yellowstone_1997<-brick("Yellowstone_19970715_lrg.jpg")
+yellowstone_1997_pca <- rasterPCA(yellowstone_1997)
+summary(yellowstone_1997_pca$model)
+# Importance of components:
+#                            Comp.1     Comp.2      Comp.3
+# Standard deviation     53.1663418 32.1895934 15.83727534
+# Proportion of Variance  0.6871417  0.2518858  0.06097246
+# Cumulative Proportion   0.6871417  0.9390275  1.00000000
+plotRGB(yellowstone_1997_pca$map,r=1,g=2,b=3, stretch="Hist")
+plot(yellowstone_1997_pca$model) #For see the graphic
+
+# PCA of Yellowstone in 2014
+yellowstone_2014<-brick("yellowstone_oli_2014291_lrg.jpg")
+yellowstone_2014_pca <- rasterPCA(yellowstone_2014)
+summary(yellowstone_2014_pca$model)
+# Importance of components:
+#                           Comp.1     Comp.2     Comp.3
+# Standard deviation     58.8659496 22.6160285 8.62257494
+# Proportion of Variance  0.8553866  0.1262603 0.01835304
+# Cumulative Proportion   0.8553866  0.9816470 1.00000000
+plotRGB(yellowstone_2014_pca$map,r=1,g=2,b=3, stretch="Hist")
+plot(yellowstone_2014_pca$model) #For see the graphic
+
+# PCA of Yellowstone in 2019
+yellowstone_2019_pca <- rasterPCA(yellowstone_2019)
+summary(yellowstone_2019_pca$model)
+# Importance of components:
+#                           Comp.1     Comp.2      Comp.3
+# Standard deviation     61.9790086 23.6047379 13.93105627
+# Proportion of Variance  0.8364219  0.1213206  0.04225754
+# Cumulative Proportion   0.8364219  0.9577425  1.00000000
+plotRGB(yellowstone_2019_pca$map,r=1,g=2,b=3, stretch="Hist")
+plot(yellowstone_2019_pca$model) #For see the graphic
+
+# Comparison PCA 1987-2019 
+par(mfrow=c(2,3))
+plotRGB(yellowstone_1987_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(yellowstone_1989_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(yellowstone_1992_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(yellowstone_1997_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(yellowstone_2014_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(yellowstone_2019_pca$map,r=1,g=2,b=3, stretch="Hist")
+
+# Confronto tra PCA 1989 e PCA 2019 
+par(mfrow=c(1,2))
+plotRGB(yellowstone_1989_pca$map,r=1,g=2,b=3, stretch="Hist")
+plotRGB(yellowstone_2019_pca$map,r=1,g=2,b=3, stretch="Hist")
+
+
+# Multiframe with ggplot
+by_1987 <- ggRGB(yellowstone_1987_pca$map,r=1,g=2,b=3, stretch="Hist")
+by_1989 <- ggRGB(yellowstone_1989_pca$map,r=1,g=2,b=3, stretch="Hist")
+by_1992 <- ggRGB(yellowstone_1992_pca$map,r=1,g=2,b=3, stretch="Hist")
+by_1997 <- ggRGB(yellowstone_1997_pca$map,r=1,g=2,b=3, stretch="Hist")
+by_2014 <- ggRGB(yellowstone_2014_pca$map,r=1,g=2,b=3, stretch="Hist")
+by_2019 <- ggRGB(yellowstone_2019_pca$map,r=1,g=2,b=3, stretch="Hist")
+
+# Multiframe with ggplot 1989-2019
+by_1989 <- ggRGB(yellowstone_1989_pca$map,r=1,g=2,b=3, stretch="Hist")
+by_2019 <- ggRGB(yellowstone_2019_pca$map,r=1,g=2,b=3, stretch="Hist")
+
+grid.arrange(by_1987, by_1989, by_1992,by_1997, by_2014,by_2019,   nrow=2, main="PCA of Yellowstone 1987-2019")
+grid.arrange(by_1987, by_1989, by_1992,by_1997, by_2014,by_2019,   nrow=2, top = textGrob("Area sottoposta ad incendio Yellowstone 1987-2019"))
+
+grid.arrange(by_1987, by_2019,   nrow=1, top = textGrob("Area sottoposta ad incendio Yellowstone 1989-2019"))
+
+
+# 2. FIRME SPETTRALI
 
 # Funzione plotRGB: yellowstone_1989
 plotRGB(yellowstone_1989, r=1, g=2, b=3, stretch="lin") # "lin": lineare, amplia i valori
@@ -66,9 +171,9 @@ plotRGB(yellowstone_1989, r=1, g=2, b=3, stretch="lin") # "lin": lineare, amplia
 click(yellowstone_1989, id=T, xy=T, cell=T, type="p", pch=16, cex=4, col="yellow")
 
 #      x     y     cell       Yellowstone_19890802_lrg.1     Yellowstone_19890802_lrg.2      Yellowstone_19890802_lrg.3
-# 1 1895.5 563.5   8874436                        103                         28                    49                  # area incendiata      
-# 2 1349.5 2502.5  2525604                        176                         88                   78                  # area incendiata 
-# 3 2055.5 2413.5  2817696                        131                          53                   53                  # area incendiata 
+# 1 1895.5 563.5   8874436                        103                         28                    49                     
+# 2 1349.5 2502.5  2525604                        176                         88                   78                   
+# 3 2055.5 2413.5  2817696                        131                          53                   53                   
 
 # Definire le colonne del dataset
 bande <- c(1,2,3)
@@ -163,7 +268,7 @@ ggplot(spectralst, aes(x=bande)) +
  labs(x="bande",y="reflectance")
 
 
-# LAND COVER
+# 3. UNSUPERVISED CLASSIFICATION
 
 yellowstone_1989<- brick("Yellowstone_19890802_lrg.jpg")
 # plot dell'immagine importata
@@ -209,83 +314,114 @@ p2 <- ggRGB(yellowstone_2019, r=1, g=2, b=3, stretch="lin")
 grid.arrange(p1, p1.1,p1.3 ,p1.2,p2, nrow=2, top="Yellowstone 1989-2019")
 
 # classificazione non supervisionata
-# la classe 1 rappresenta l'area incendiata, mentre la classe 2 identifica la vegetazione
+# Le quattro classi corrispondono alle quattro zone dell’immagine che ho identificato, corrispondenti a quattro diversi livelli di riflettanza, in base alle varie tipologie di suolo e vegetazione. 
+# La divisione in classi non è la stessa per ogni immagine, in quanto la scelta del software nell'assegnazione delle classi è randomica
 d1y <- unsuperClass(yellowstone_1989, nClasses=4)
-plot(d1y$map)
 d1.1y <- unsuperClass(yellowstone_1992, nClasses=4)
-plot(d1.1y$map)
 d1.3y <- unsuperClass(yellowstone_1997, nClasses=4)
-plot(d1.3y$map)
-d1.2y <- unsuperClass(yellowstone_2014, nClasses=4)
-plot(d1.2y$map)
+d1.2y <- unsuperClass(yellowstone_2014, nClasses=4
 d2y <- unsuperClass(yellowstone_2019, nClasses=4)
-plot(d2y$map)
 
 par(mfrow=c(2,3))
-plot(d1y$map, main="Land cover Yellowstone 1989-2019")
-plot(d1.1y$map, main="Land cover Yellowstone 1989-2019")
-plot(d1.3y$map,main="Land cover Yellowstone 1989-2019")
-plot(d1.2y$map,main="Land cover Yellowstone 1989-2019")
-plot(d2y$map, main="Land cover Yellowstone 1989-2019")
+plot(d1y$map, main="Land cover Yellowstone 1989")
+plot(d1.1y$map, main="Land cover Yellowstone 1992")
+plot(d1.3y$map,main="Land cover Yellowstone 1997")
+plot(d1.2y$map,main="Land cover Yellowstone 2014")
+plot(d2y$map, main="Land cover Yellowstone 2019")
 
 # calcolo delle frequenze dei pixel
+plot(d1y$map)                     
 freq(d1y$map)
 #  value   count
-# [1,]     1 2112978  #area incendiata
-# [2,]     2 4685647  #foresta matura
-# [3,]     3 3308693  # foresta estiva
-# [4,]     4  611758  # acqua
+# [1,]     1 2087293 -> area incendiata
+# [2,]     2 4697269 -> foresta matura
+# [3,]     3 3313430 -> foresta estiva
+# [4,]     4  621084 -> acqua
 
+plot(d1.1y$map)                      
+freq(d1.1y$map)
+#  value   count                      
+# [1,]     1 2708223 -> area incendiata
+# [2,]     2 4282736  -> foresta matura
+# [3,]     3  565227 -> acqua
+# [4,]     4 3162890 -> foresta estiva
+
+plot(d1.3y$map)
+freq(d1.3y$map)
+#      value   count
+# [1,]     1 4151061 -> foresta matura
+# [2,]     2  544167  -> acqua
+# [3,]     3 3629617 -> area incendiata
+# [4,]     4 2394231 -> foresta estiva
+
+plot(d1.2y$map)                      
+freq(d1.2y$map)
+#  value   count                      
+# [1,]     1 1174133 -> acqua
+# [2,]     2 4248007 -> foresta matura
+# [3,]     3 2794500 -> area incendiata(cicatrici)
+# [4,]     4 2502436 -> foresta estiva
+                                          
+plot(d2y$map)
+freq(d2y$map)
+#      value   count
+# [1,]     1 4064044 -> area incendiata(cicatrici)
+# [2,]     2  531602 -> nuvole
+# [3,]     3  819435  -> acqua
+# [4,]     4 5303995 -> foresta estiva
+                                                                                                           
 # somma totale dei pixel della prima immagine
-s1 <- 2112978 + 4685647 + 3308693 + 611758
-# proporzione di pixel delle quattro classi 
+s1 <- 2087293 + 4697269 + 3313430 + 621084
+# proporzione di pixel delle quattro classi
+freq(d1y$map)                      
 prop1 <- freq(d1y$map)/s1
-# prop area incendiata: 0.1971231
-# prop foresta matura : 0.4371316
-# prop foresta estiva: 0.3086733
-# prop acqua: 0.0570719
+# prop area incendiata: 0.19472695
+# prop foresta matura : 0.43821585
+# prop foresta estiva: 0.30911526
+# prop acqua: 0.05794193
 
 freq(d1.1y$map)
 prop1.1 <- freq(d1.1y$map)/s1
-# prop area incendiata: 0.25164305
-# prop foresta matura : 0.39895220
-# prop foresta estiva: 0.29746976
-# prop acqua: 0.05193498
+# prop area incendiata: 0.25265452
+# prop foresta matura : 0.39954339
+# prop foresta estiva: 0.29507114
+# prop acqua: 0.05273094
 
 freq(d1.3y$map)
 prop1.3 <- freq(d1.3y$map)/s1
-# prop area incendiata: 0.34191296
-# prop foresta matura : 0.38149342
-# prop foresta estiva: 0.22575276
-# prop acqua: 0.05084086
+# prop area incendiata: 0.33861286
+# prop foresta matura : 0.38725922
+# prop foresta estiva: 0.22336170
+# prop acqua: 0.05076622
 
 freq(d1.2y$map)
 prop1.2 <- freq(d1.2y$map)/s1
-# prop area incendiata: 0.2534322
-# prop foresta matura : 0.4082732
-# prop foresta estiva: 0.2281233
-# prop acqua: 0.1101713
+# prop area incendiata: 0.2607034
+# prop foresta matura : 0.3963035
+# prop foresta estiva: 0.2334563
+# prop acqua: 0.1095368
 
 freq(d2y$map)
 prop2 <- freq(d2y$map)/s1
-# prop area incendiata: 0.38374838
-# prop foresta matura : 0.48993271
-# prop foresta estiva: 0.04987781 (nuvole)
-# prop acqua: 0.07644110
+# prop area incendiata: 0.37914126
+# prop foresta matura : 0.49481830
+# prop foresta estiva: 0.04959401 (nuvole)
+# prop acqua: 0.07644642
 
 # Costruiamo un dataframe, mettiamo la c perchè sono due blocchi di una stessa parte
 cover <- c("Area incendio", "Vegetazione", "Acqua")
-percent_1989 <- c(19.71, 74.57, 5.7)
-percent_1992 <- c(25.16, 69.63, 5.2)
-percent_1997 <- c(34.19, 60.71, 5.1)
-percent_2014 <- c(25.34, 63.63, 11.01)
-percent_2019 <- c(38.37, 53.89, 7.6)
+percent_1989 <- c(19.47, 74.73, 5.79)
+percent_1992 <- c(25.26, 69.45, 5.27)
+percent_1997 <- c(33.86, 61.05, 5.07)
+percent_2014 <- c(26.07, 62.97, 10.95)
+percent_2019 <- c(37.91, 54.38, 7.64)
 
 percentages <- data.frame(cover, percent_1989, percent_1992,percent_1997 , percent_2014,percent_2019)
-#        cover percent_1989 percent_1992 percent_1997 percent_2014 percent_2019
-# 1 Area incendio        19.71        25.16        34.19        25.34        38.37
-# 2   Vegetazione        74.57        69.63        60.71        63.63        53.89
-# 3         Acqua         5.70         5.20         5.10        11.01         7.60
+#           cover percent_1989 percent_1992 percent_1997 percent_2014 percent_2019
+# 1 Area incendio        19.47        25.26        33.86        26.07        37.91
+# 2   Vegetazione        74.73        69.45        61.05        62.97        54.38
+# 3         Acqua         5.79         5.27         5.07        10.95         7.64
+
 
 
 # utilizziamo ggplot2 per creare un grafico con il dataframe appena realizzato
@@ -295,114 +431,15 @@ ggplot(percentages, aes(x=cover, y=percent_1997, color=cover)) + geom_bar(stat="
 ggplot(percentages, aes(x=cover, y=percent_2014, color=cover)) + geom_bar(stat="identity", fill="white")
 ggplot(percentages, aes(x=cover, y=percent_2019, color=cover)) + geom_bar(stat="identity", fill="white")
 
-
-lc1<- gggplot(percentages, aes(x=cover, y=percent_1989, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
+# uso la funzione grid.arrange per mettere i grafici in una pagina  della libreria gridextra già installata
+lc1<- ggplot(percentages, aes(x=cover, y=percent_1989, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
 lc2<- ggplot(percentages, aes(x=cover, y=percent_1992, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
 lc3 <-ggplot(percentages, aes(x=cover, y=percent_1997, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
 lc4<- ggplot(percentages, aes(x=cover, y=percent_2014, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
 lc5<- ggplot(percentages, aes(x=cover, y=percent_2019, fill=cover)) + geom_bar(stat="identity") + theme_minimal()
 
-grid.arrange(p1, p1.1,p1.3 ,p1.2,p2, nrow=2, top="Yellowstone 1989-2019")
+grid.arrange(lc1,lc2,lc3,lc4,lc5, nrow=2, top="Yellowstone 1989-2019")
+grid.arrange(lc1,lc5, nrow=2, top="Yellowstone 1989-2019")
 
-
-p1<- gggplot(percentages, aes(x=cover, y=percent_1989, color=blue)) + geom_bar(aes(fill = drv))
-p2<- gggplot(percentages, aes(x=cover, y=percent_1989, color=blue)) + geom_bar(aes(fill = drv))
-p3<- gggplot(percentages, aes(x=cover, y=percent_1989, color=blue)) + geom_bar(aes(fill = drv))
-p4<- gggplot(percentages, aes(x=cover, y=percent_1989, color=blue)) + geom_bar(aes(fill = drv))
-
-
-# 2. Principal component analysis
-
-# PCA of Yellowstone in 1987
-yellowstone_1987<-brick("Yellowstone_19870805_lrg.jpg")
-yellowstone_1987_pca <- rasterPCA(yellowstone_1987)
-summary(yellowstone_1987_pca$model)
-# Importance of components:
-#                           Comp.1      Comp.2     Comp.3
-# Standard deviation     80.6695408 23.73591028 17.2899836
-# Proportion of Variance  0.8829922  0.07644507  0.0405627
-# Cumulative Proportion   0.8829922  0.95943730  1.0000000
-plotRGB(yellowstone_1987_pca$map,r=1,g=2,b=3, stretch="Hist")
-plot(yellowstone_1987_pca$model) #For see the graphic
-
-# PCA of Yellowstone in 1989
-yellowstone_1989_pca <- rasterPCA(yellowstone_1989)
-summary(yellowstone_1989_pca$model)
-# Importance of components:
-#                           Comp.1     Comp.2      Comp.3
-# Standard deviation     54.3967013 38.8648794 10.55508959
-# Proportion of Variance  0.6459446  0.3297348  0.02432058
-# Cumulative Proportion   0.6459446  0.9756794  1.00000000
-plotRGB(yellowstone_1989_pca$map,r=1,g=2,b=3, stretch="Hist")
-plot(yellowstone_1989_pca$model) #For see the graphic
-
-# PCA of Yellowstone in 1992
-yellowstone_1992<-brick("Yellowstone_19920802_lrg.jpg")
-yellowstone_1992_pca <- rasterPCA(yellowstone_1992)
-summary(yellowstone_1992_pca$model)
-# Importance of components:
-#                           Comp.1     Comp.2      Comp.3
-# Standard deviation     55.4420561 30.4443849 13.62554231
-# Proportion of Variance  0.7342508  0.2214013  0.04434793
-# Cumulative Proportion   0.7342508  0.9556521  1.00000000
-plotRGB(yellowstone_1992_pca$map,r=1,g=2,b=3, stretch="Hist")
-plot(yellowstone_1992_pca$model) #For see the graphic
-
-# PCA of Yellowstone in 1997
-yellowstone_1997<-brick("Yellowstone_19970715_lrg.jpg")
-yellowstone_1997_pca <- rasterPCA(yellowstone_1997)
-summary(yellowstone_1997_pca$model)
-# Importance of components:
-#                            Comp.1     Comp.2      Comp.3
-# Standard deviation     53.1663418 32.1895934 15.83727534
-# Proportion of Variance  0.6871417  0.2518858  0.06097246
-# Cumulative Proportion   0.6871417  0.9390275  1.00000000
-plotRGB(yellowstone_1997_pca$map,r=1,g=2,b=3, stretch="Hist")
-plot(yellowstone_1997_pca$model) #For see the graphic
-
-# PCA of Yellowstone in 2014
-yellowstone_2014<-brick("yellowstone_oli_2014291_lrg.jpg")
-yellowstone_2014_pca <- rasterPCA(yellowstone_2014)
-summary(yellowstone_2014_pca$model)
-# Importance of components:
-#                           Comp.1     Comp.2     Comp.3
-# Standard deviation     58.8659496 22.6160285 8.62257494
-# Proportion of Variance  0.8553866  0.1262603 0.01835304
-# Cumulative Proportion   0.8553866  0.9816470 1.00000000
-plotRGB(yellowstone_2014_pca$map,r=1,g=2,b=3, stretch="Hist")
-plot(yellowstone_2014_pca$model) #For see the graphic
-
-# PCA of Yellowstone in 2019
-yellowstone_2019_pca <- rasterPCA(yellowstone_2019)
-summary(yellowstone_2019_pca$model)
-# Importance of components:
-#                           Comp.1     Comp.2      Comp.3
-# Standard deviation     61.9790086 23.6047379 13.93105627
-# Proportion of Variance  0.8364219  0.1213206  0.04225754
-# Cumulative Proportion   0.8364219  0.9577425  1.00000000
-plotRGB(yellowstone_2019_pca$map,r=1,g=2,b=3, stretch="Hist")
-plot(yellowstone_2019_pca$model) #For see the graphic
-
-# Comparison PCA 2019 and PCA 2021 
-par(mfrow=c(2,3))
-plotRGB(yellowstone_1987_pca$map,r=1,g=2,b=3, stretch="Hist")
-plotRGB(yellowstone_1989_pca$map,r=1,g=2,b=3, stretch="Hist")
-plotRGB(yellowstone_1992_pca$map,r=1,g=2,b=3, stretch="Hist")
-plotRGB(yellowstone_1997_pca$map,r=1,g=2,b=3, stretch="Hist")
-plotRGB(yellowstone_2014_pca$map,r=1,g=2,b=3, stretch="Hist")
-plotRGB(yellowstone_2019_pca$map,r=1,g=2,b=3, stretch="Hist")
-
-# Multiframe with ggplot
-by_1987 <- ggRGB(yellowstone_1987_pca$map,r=1,g=2,b=3, stretch="Hist")
-by_1989 <- ggRGB(yellowstone_1989_pca$map,r=1,g=2,b=3, stretch="Hist")
-by_1992 <- ggRGB(yellowstone_1992_pca$map,r=1,g=2,b=3, stretch="Hist")
-by_1997 <- ggRGB(yellowstone_1997_pca$map,r=1,g=2,b=3, stretch="Hist")
-by_2014 <- ggRGB(yellowstone_2014_pca$map,r=1,g=2,b=3, stretch="Hist")
-by_2019 <- ggRGB(yellowstone_2019_pca$map,r=1,g=2,b=3, stretch="Hist")
-
-grid.arrange(by_1987, by_1989, by_1992,by_1997, by_2014,by_2019,   nrow=2, main="PCA of Yellowstone 1987-2019")
-grid.arrange(by_1987, by_1989, by_1992,by_1997, by_2014,by_2019,   nrow=2, top = textGrob("Area sottoposta ad incendio Yellowstone 1987-2019"))
-
-
-..............................................................................................
+...................................................................................................................................
 
